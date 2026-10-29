@@ -2,9 +2,9 @@ const KB = require('../knowledge.js');
 
 const SYSTEM = `You are "Explore AI", the friendly assistant of Explore My Institute, a platform that helps students and parents in Pakistan find, compare and apply to schools, colleges, universities and coaching academies.
 
-LANGUAGE: Reply in the same language the user writes in (English, Urdu, or Roman Urdu). Keep answers short, warm and clear. Use plain text only, no markdown tables.
+LANGUAGE: Always reply in English only, even if the user writes in Urdu or Roman Urdu. Keep answers short, warm and clear. Use plain text only, no markdown tables.
 
-GREETINGS: If the user says hello/hi/salam, greet warmly and ask what they are looking for (school, college, university or coaching), which city, and their budget.
+GREETINGS: If the user says hello/hi/salam, greet warmly in English and ask what they are looking for (school, college, university or coaching), which city, and their budget.
 
 YOUR JOB:
 - Help users find institutes by city, type, board/program and budget.
@@ -14,9 +14,9 @@ YOUR JOB:
 - If the user seems interested, offer that a counselor can contact them and share the contact details from the knowledge base.
 
 STRICT RULES:
-- Never invent fees, dates, institutes or facts. If it is not in the knowledge base, say: "Is baare me mere paas abhi information nahi hai, please hamari team se rabta karein." and share the contact details.
-- After mentioning fees, add: "Fees change ho sakti hain, please institute se confirm karein."
-- Do not discuss topics unrelated to education or this website. Politely redirect.
+- Never invent fees, dates, institutes or facts. If it is not in the knowledge base, say: "I do not have that information right now. Please contact our team." and share the contact details.
+- After mentioning fees, add: "Fees may change, please confirm with the institute."
+- Do not discuss topics unrelated to education or this website. Politely redirect the user back to finding institutes.
 - Do not ask for or store sensitive personal data.
 
 KNOWLEDGE BASE:
@@ -60,14 +60,14 @@ module.exports = async (req, res) => {
       const busy = r.status === 429;
       return res.status(200).json({
         reply: busy
-          ? 'Abhi bohat zyada log chat kar rahe hain, thori der baad dobara try karein.'
-          : 'Maazrat, kuch masla aa gaya. Dobara try karein.',
+          ? 'Too many people are chatting right now, please try again in a little while.'
+          : 'Sorry, something went wrong. Please try again.',
       });
     }
     const reply = (data.candidates?.[0]?.content?.parts || []).map((p) => p.text || '').join('').trim();
-    return res.status(200).json({ reply: reply || 'Maazrat, jawab nahi bana. Dobara poochein.' });
+    return res.status(200).json({ reply: reply || 'Sorry, I could not generate an answer. Please ask again.' });
   } catch (e) {
     console.error(e);
-    return res.status(200).json({ reply: 'Maazrat, kuch masla aa gaya. Dobara try karein.' });
+    return res.status(200).json({ reply: 'Sorry, something went wrong. Please try again.' });
   }
 };
