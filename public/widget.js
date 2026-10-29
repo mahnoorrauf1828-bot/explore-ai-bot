@@ -6,8 +6,8 @@
   var color = s.getAttribute('data-color') || '#0B2A5B';
   var accent = s.getAttribute('data-accent') || '#F57C00';
   var greet = s.getAttribute('data-greeting') ||
-    'Assalam o Alaikum! 👋 Main Explore AI hoon. Aap kaisa institute dhoond rahe hain? School, college ya coaching? Shehar aur budget bata dein.';
-  var chips = ['Karachi me O Level schools', 'MDCAT coaching', 'Fee kam wale colleges'];
+    'Hello! 👋 I am Explore AI. What kind of institute are you looking for: school, college, university or coaching? Tell me your city and budget.';
+  var chips = ['O Level schools in Karachi', 'MDCAT coaching', 'Low fee colleges'];
   var history = [];
 
   var css = '.emi-b{position:fixed;bottom:20px;' + pos + ':20px;width:58px;height:58px;border-radius:50%;background:' + accent + ';color:#fff;border:0;font-size:26px;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.3);z-index:99999}' +
@@ -30,7 +30,7 @@
     '<button class="emi-b" aria-label="Chat">💬</button>' +
     '<div class="emi-w"><div class="emi-h">' + title + '<span>×</span></div>' +
     '<div class="emi-m"></div>' +
-    '<div class="emi-f"><input placeholder="Apna sawal likhein..." /><button>➤</button></div></div>';
+    '<div class="emi-f"><input placeholder="Type your question..." /><button>➤</button></div></div>';
   document.body.appendChild(box);
 
   var btn = box.querySelector('.emi-b'), win = box.querySelector('.emi-w'),
@@ -63,12 +63,12 @@
     fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ messages: history }) })
       .then(function (r) { return r.json(); })
       .then(function (d) {
-        var reply = d.reply || 'Maazrat, dobara try karein.';
+        var reply = d.reply || 'Sorry, please try again.';
         t.innerHTML = fmt(reply);
         history.push({ role: 'bot', text: reply });
         msgs.scrollTop = msgs.scrollHeight;
       })
-      .catch(function () { t.innerHTML = 'Internet ka masla lag raha hai, dobara try karein.'; });
+      .catch(function () { t.innerHTML = 'Connection problem, please try again.'; });
   }
 
   btn.onclick = function () { win.style.display = win.style.display === 'flex' ? 'none' : 'flex'; };
